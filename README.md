@@ -14,7 +14,28 @@ A comprehensive DevOps learning project: CI/CD, Kubernetes, Infrastructure as Co
 - `scripts/` - Automation scripts
 
 ## Quick Start
-(More coming soon)
+
+### Local Development
+```bash
+cd mobilebank-app
+pip install -r requirements.txt
+python app.py
+```
+
+### Docker
+```bash
+cd mobilebank-app
+docker build -t mobilebank-api:latest .
+docker run -p 5000:5000 mobilebank-api:latest
+```
+
+### CI/CD
+The pipeline automatically runs on every push to `main`:
+- Builds Docker image
+- Runs tests
+- (Soon: pushes to registry)
+
+See [CI Pipeline Documentation](docs/ci-pipeline.md) for details.
 
 ## Roadmap
 Week 1-2: CI/CD Foundation
