@@ -29,6 +29,17 @@ docker build -t mobilebank-api:latest .
 docker run -p 5000:5000 mobilebank-api:latest
 ```
 
+## Docker Image
+Docker images are automatically built and pushed to Docker Hub:
+- Repository: https://hub.docker.com/r/ferdev49/mobilebank-api
+- Latest: `ferdev49/mobilebank-api:latest`
+
+Pull and run:
+```bash
+docker pull ferdev49/mobilebank-api:latest
+docker run -p 5000:5000 ferdev49/mobilebank-api:latest
+```
+
 ### CI/CD
 The pipeline automatically runs on every push to `main`:
 - Builds Docker image
