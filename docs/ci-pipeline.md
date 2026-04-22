@@ -26,6 +26,9 @@ Automated pipeline that runs on every push to main and pull requests.
 - ✅ Push to main branch
 - ✅ Pull requests to main branch
 
+## Status
+- ✅ Pipeline working and passing all jobs
+
 ## Next Steps
 - Add Docker push to registry
 - Add code quality checks

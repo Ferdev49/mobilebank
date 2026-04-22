@@ -28,43 +28,21 @@ A comprehensive DevOps learning project demonstrating **CI/CD automation, contai
 
 ## 📂 Project Structure
 
-\\\
+```text
 mobilebank/
-├── mobilebank-app/              # Flask application
-│   ├── app.py                   # Main Flask app (3 endpoints)
-│   ├── requirements.txt          # Python dependencies
-│   └── Dockerfile               # Docker image definition
-│
-├── kubernetes/                   # Kubernetes manifests
+├── mobilebank-app/           # Flask application
+│   ├── app.py                # Main Flask app (3 endpoints)
+│   ├── requirements.txt      # Python dependencies
+│   └── Dockerfile            # Docker image definition
+├── kubernetes/               # Kubernetes manifests
 │   └── base/
-│       ├── namespace.yaml       # Creates isolated namespace
-│       ├── deployment.yaml      # 2 replicas with health checks
-│       ├── service.yaml         # LoadBalancer for traffic distribution
-│       └── kustomization.yaml   # Groups files together
-│
-├── terraform/                    # Infrastructure as Code (future)
-│   ├── modules/                 # Reusable Terraform modules
-│   └── environments/            # Staging & production configs
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yaml             # GitHub Actions pipeline
-│
-├── docs/                         # Documentation
-│   ├── ci-pipeline.md
-│   ├── docker-push.md
-│   ├── kubernetes-deployment.md
-│   ├── pain-points.md
-│   ├── week1-roadmap.md
-│   ├── week1-summary.md
-│   └── current-state-assessment.md
-│
-├── scripts/                      # Automation scripts (future)
-├── README.md                     # This file
-└── LICENSE                       # MIT License
-\\\
-
----
+│       ├── namespace.yaml    # Creates isolated namespace
+│       ├── deployment.yaml   # 2 replicas with health checks
+│       ├── service.yaml      # LoadBalancer for traffic
+│       └── kustomization.yaml# Groups files together
+├── terraform/                # Infrastructure as Code (future)
+├── .github/                  # GitHub Actions pipeline
+└── docs/                     # Documentation
 
 ## 🚀 Quick Start
 
