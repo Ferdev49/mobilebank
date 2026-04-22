@@ -48,14 +48,14 @@ mobilebank/
 
 ### Option 1: Local Development
 
-\\\ash
+\\\Bash
 cd mobilebank-app
 pip install -r requirements.txt
 python app.py
 \\\
 
 **Test the API:**
-\\\ash
+\\\Bash
 curl http://localhost:5000/health
 curl http://localhost:5000/api/accounts
 \\\
@@ -64,14 +64,14 @@ curl http://localhost:5000/api/accounts
 
 ### Option 2: Docker
 
-\\\ash
+\\\Bash
 cd mobilebank-app
 docker build -t mobilebank-api:latest .
 docker run -p 5000:5000 mobilebank-api:latest
 \\\
 
 **Test the API:**
-\\\ash
+\\\Bash
 curl http://localhost:5000/health
 \\\
 
@@ -82,18 +82,18 @@ curl http://localhost:5000/health
 **Prerequisites:** Docker Desktop with Kubernetes enabled OR Minikube
 
 **Deploy:**
-\\\ash
+\\\Bash
 kubectl apply -f kubernetes/base/namespace.yaml
 kubectl apply -k kubernetes/base/
 \\\
 
 **Verify deployment:**
-\\\ash
+\\\Bash
 kubectl get all -n mobilebank
 \\\
 
 **Test the API:**
-\\\ash
+\\\Bash
 # Port-forward to local machine
 kubectl port-forward -n mobilebank svc/mobilebank-api 8080:80
 
@@ -103,7 +103,7 @@ curl http://localhost:8080/api/accounts
 \\\
 
 **Cleanup:**
-\\\ash
+\\\ash
 kubectl delete namespace mobilebank
 \\\
 
@@ -112,14 +112,14 @@ kubectl delete namespace mobilebank
 ## 📡 API Endpoints
 
 ### Health Check
-\\\ash
+\\\Bash
 GET /health
 Response: {"status": "healthy"}
 \\\
 Used by Kubernetes to verify app is alive.
 
 ### Get Accounts
-\\\ash
+\\\Bash
 GET /api/accounts
 Response: {
   "accounts": [
@@ -130,7 +130,7 @@ Response: {
 \\\
 
 ### Transfer Money
-\\\ash
+\\\Bash
 POST /api/transfer
 Response: {
   "status": "success",
@@ -150,7 +150,7 @@ Automatically built and pushed to Docker Hub on every push to \main\:
   - \<commit-sha>\ - Specific version (for rollbacks)
 
 **Pull and run:**
-\\\ash
+\\\Bash
 docker pull ferdev49/mobilebank-api:latest
 docker run -p 5000:5000 ferdev49/mobilebank-api:latest
 \\\
@@ -263,7 +263,7 @@ See [Pain Points Analysis](docs/pain-points.md) for complete list.
 
 **To make changes:**
 
-\\\ash
+\\\Bash
 # 1. Make code changes
 vim mobilebank-app/app.py
 
@@ -284,7 +284,7 @@ git push origin main
 
 **To deploy to Kubernetes:**
 
-\\\ash
+\\\Bash
 # 1. Update image in kubernetes/base/deployment.yaml (if needed)
 # 2. Apply changes
 kubectl apply -k kubernetes/base/
@@ -330,7 +330,7 @@ See [Week 1 Roadmap](docs/week1-roadmap.md) for details.
 ## 🛠 Troubleshooting
 
 ### Docker build fails
-\\\ash
+\\\Bash
 # Check Docker is running
 docker ps
 
@@ -340,7 +340,7 @@ docker build -t mobilebank-api:test .
 \\\
 
 ### Kubernetes pods not starting
-\\\ash
+\\\Bash
 # Check pod logs
 kubectl logs -n mobilebank -l app=mobilebank-api
 
@@ -352,7 +352,7 @@ kubectl describe nodes
 \\\
 
 ### Can't connect to API
-\\\ash
+\\\Bash
 # Verify service is running
 kubectl get svc -n mobilebank
 

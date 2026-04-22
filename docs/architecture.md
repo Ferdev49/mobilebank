@@ -1,16 +1,52 @@
 # MobileBank Architecture
+
 ## Current State (Week 1)
-┌─────────────────┐ │ Developer's │ │ Laptop │ │ ├─ Code (git) │ │ ├─ Docker │ │ └─ App
-running │ └────────┬────────┘ │ ├─ Manual push to "production" │ (which is also local or a VM) │
-└─ No monitoring, no logging
+```text
+┌─────────────────┐
+│  Developer's    │
+│    Laptop       │
+│                 │
+│  ├─ Code (git)  │
+│  ├─ Docker      │
+│  └─ App running │
+└────────┬────────┘
+         │
+         ├─ Manual push to "production"
+         │  (which is also local or a VM)
+         │
+         └─ No monitoring, no logging
+
 ## Target State (Week 11)
-┌──────────────────┐ │ GitHub │ │ ├─ Code push │ │ └─ Webhook │
-└────────┬─────────┘ │ ▼ ┌──────────────────┐ │ GitHub Actions │ │ ├─ Lint │ │ ├─
-Test │ │ ├─ Build Docker │ │ └─ Deploy │ └────────┬─────────┘ │ ┌────┴─────┐ │ │ ▼ ▼
-┌────────┐ ┌──────────┐ │ Staging│ │Production│ │ K8s │ │ K8s │ │Cluster │ │ Cluster │
-└────┬───┘ └────┬─────┘ │ │ ▼ ▼ ┌────────────────────────┐ │ Monitoring │ ├─
-Prometheus/Grafana │ ├─ Logs (ELK/Loki) │ ├─ Alerts (PagerDuty) │
+┌──────────────────┐
+│      GitHub      │
+│  ├─ Code push    │
+│  └─ Webhook      │
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│  GitHub Actions  │
+│  ├─ Lint & Test  │
+│  ├─ Build Docker │
+│  └─ Deploy       │
+└────────┬─────────┘
+         │
+    ┌────┴─────┐
+    │          │
+    ▼          ▼
+┌────────┐ ┌──────────┐
+│ Staging│ │Production│
+│  K8s   │ │   K8s    │
+└────┬───┘ └────┬─────┘
+     │          │
+     ▼          ▼
+┌────────────────────────┐
+│      Monitoring        │
+│ ├─ Prometheus/Grafana  │
+│ ├─ Logs (ELK/Loki)     │
+│ ├─ Alerts (PagerDuty)  │
 └────────────────────────┘
+
 ## Deployment Flow
 1. Developer: `git push` to main branch
 2. GitHub: Webhook triggers GitHub Actions
