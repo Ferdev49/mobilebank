@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"mobilebank_production","Source":"./modules/kubernetes-app","Dir":"modules/kubernetes-app"},{"Key":"mobilebank_staging","Source":"./modules/kubernetes-app","Dir":"modules/kubernetes-app"}]}
