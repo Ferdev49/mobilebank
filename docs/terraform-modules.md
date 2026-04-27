@@ -6,12 +6,13 @@ Terraform modules are reusable, self-contained packages of infrastructure. Inste
 
 ## Module Structure
 
-```text
+```
 modules/
 └── kubernetes-app/
-    ├── main.tf       # Resource definitions
-    ├── variables.tf  # Input variables
-    └── outputs.tf    # Output values
+    ├── main.tf        # Resource definitions
+    ├── variables.tf   # Input variables
+    └── outputs.tf     # Output values
+```
 
 ## The kubernetes-app Module
 
