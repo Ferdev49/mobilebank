@@ -1,28 +1,19 @@
-﻿# Production environment configuration
+﻿# Production environment - uses production.tfvars for variables
 module "mobilebank_production" {
   source = "./modules/kubernetes-app"
 
-  app_name  = "mobilebank-api"
-  namespace = "mobilebank-production"
-  environment = "production"
-  
-  # Production: more replicas (high availability)
-  replicas = 3
-  image    = "ferdev49/mobilebank-api:latest"
-  port     = 5000
-
-  # Production: more resources (reliability)
-  cpu_request    = "200m"
-  memory_request = "256Mi"
-  cpu_limit      = "500m"
-  memory_limit   = "512Mi"
-
-  enable_health_checks = true
-  health_check_path    = "/health"
-
-  labels = {
-    "tier" = "production"
-    "cost-center" = "operations"
-    "sla" = "99-9-percent"
-  }
+  # All variables come from production.tfvars
+  app_name             = var.app_name
+  namespace            = var.namespace
+  environment          = var.environment
+  replicas             = var.replicas
+  image                = var.image
+  port                 = var.port
+  cpu_request          = var.cpu_request
+  memory_request       = var.memory_request
+  cpu_limit            = var.cpu_limit
+  memory_limit         = var.memory_limit
+  enable_health_checks = var.enable_health_checks
+  health_check_path    = var.health_check_path
+  labels               = var.labels
 }

@@ -1,27 +1,19 @@
-﻿# Staging environment configuration
+﻿# Staging environment - uses staging.tfvars for variables
 module "mobilebank_staging" {
   source = "./modules/kubernetes-app"
 
-  app_name  = "mobilebank-api"
-  namespace = "mobilebank-staging"
-  environment = "staging"
-  
-  # Staging: fewer replicas (cost saving)
-  replicas = 2
-  image    = "ferdev49/mobilebank-api:latest"
-  port     = 5000
-
-  # Staging: less resources needed
-  cpu_request    = "100m"
-  memory_request = "128Mi"
-  cpu_limit      = "250m"
-  memory_limit   = "256Mi"
-
-  enable_health_checks = true
-  health_check_path    = "/health"
-
-  labels = {
-    "tier" = "staging"
-    "cost-center" = "development"
-  }
+  # All variables come from staging.tfvars
+  app_name             = var.app_name
+  namespace            = var.namespace
+  environment          = var.environment
+  replicas             = var.replicas
+  image                = var.image
+  port                 = var.port
+  cpu_request          = var.cpu_request
+  memory_request       = var.memory_request
+  cpu_limit            = var.cpu_limit
+  memory_limit         = var.memory_limit
+  enable_health_checks = var.enable_health_checks
+  health_check_path    = var.health_check_path
+  labels               = var.labels
 }
