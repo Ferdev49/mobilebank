@@ -1,0 +1,18 @@
+﻿# Terraform files
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+!environments/*.tfvars
+crash.log
+crash.*.log
+*.jar
+.DS_Store
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.env
+.env.local
