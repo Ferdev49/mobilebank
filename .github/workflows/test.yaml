@@ -1,0 +1,70 @@
+name: Tests CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'mobilebank-app/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'mobilebank-app/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    
+    steps:
+    - name: 📥 Checkout código
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: 📦 Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        cd mobilebank-app
+        pip install -r requirements.txt
+    
+    - name: 🧪 Ejecutar tests con pytest
+      run: |
+        cd mobilebank-app
+        pytest tests/ -v --tb=short --cov=. --cov-report=xml --cov-report=html
+    
+    - name: 📊 Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./mobilebank-app/coverage.xml
+        fail_ci_if_error: false
+    
+    - name: ✅ Tests completados
+      run: echo "✅ Tests passed for Python ${{ matrix.python-version }}"
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout código
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: 📦 Instalar flake8
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+    
+    - name: 🔍 Lint con flake8
+      run: |
+        cd mobilebank-app
+        flake8 app.py --max-line-length=120 || true
