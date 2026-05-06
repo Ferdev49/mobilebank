@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/rules/0/host
+  value: api.mobilebank.local
+- op: replace
+  path: /metadata/annotations/nginx.ingress.kubernetes.io~1limit-rps
+  value: "100"

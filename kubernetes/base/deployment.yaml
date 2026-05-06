@@ -1,4 +1,4 @@
-﻿apiVersion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mobilebank-api
@@ -14,29 +14,59 @@ spec:
     metadata:
       labels:
         app: mobilebank-api
+      annotations:
+        # Anotaciones para autodiscovery de Prometheus (Week 4 - Day 18)
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "5000"
     spec:
       containers:
-      - name: mobilebank-api
-        image: ferdev49/mobilebank-api:latest
-        ports:
-        - containerPort: 5000
-          name: http
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 5000
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 5000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        - name: mobilebank-api
+          image: ferdev49/mobilebank-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+              name: http
+          # Configuracion no-sensible y secrets (Week 3 - Day 14)
+          envFrom:
+            - configMapRef:
+                name: mobilebank-config
+            - secretRef:
+                name: mobilebank-secrets
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          # Probes mejorados con endpoints dedicados (Week 3)
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 2
+          startupProbe:
+            httpGet:
+              path: /health/live
+              port: 5000
+            initialDelaySeconds: 0
+            periodSeconds: 3
+            failureThreshold: 30
+          # Volumen persistente (Week 3 - Day 16)
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mobilebank-data

@@ -1,0 +1,15 @@
+# PersistentVolumeClaim para logs y datos persistentes de MobileBank
+# Usa el StorageClass por defecto del cluster (hostpath en Docker Desktop / Minikube).
+# Para production: cambiar a un StorageClass de tu cloud (gp3, premium-rwo, etc.)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mobilebank-data
+  namespace: mobilebank
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # storageClassName: standard  # Descomentar para forzar un SC especifico

@@ -4,12 +4,17 @@ A comprehensive DevOps learning project demonstrating **CI/CD automation, contai
 
 ## 📊 Project Status
 
-🚀 **In Progress** - Week 1 Complete (April 14-24, 2026)
-- ✅ CI/CD Pipeline (GitHub Actions)
-- ✅ Docker Automation (Build + Push)
-- ✅ Kubernetes Deployment (2 replicas + Load Balancer)
-- ✅ Health Checks & Auto-Recovery
-- ⏳ Week 2-11: Infrastructure as Code, Monitoring, Security
+🚀 **In Progress** - Week 3 Complete (April 14 – May 2, 2026)
+- ✅ CI/CD Pipeline (GitHub Actions) — Week 1
+- ✅ Docker Automation (Build + Push) — Week 1
+- ✅ Kubernetes Deployment + Health Checks — Week 1
+- ✅ Terraform IaC + multi-environment + módulo reutilizable — Week 2
+- ✅ NGINX Ingress Controller (path/host routing + rate limit) — Week 3 Day 13
+- ✅ ConfigMaps & Secrets (config externalizada, feature flags) — Week 3 Day 14
+- ✅ HPA + Metrics Server (autoscaling 2–10 pods) — Week 3 Day 15
+- ✅ PersistentVolumeClaims (logs y transferencias persistentes) — Week 3 Day 16
+- ✅ Kustomize overlays staging/production — Week 3
+- ⏳ Week 4–11: TLS/cert-manager, observabilidad, BD real, security hardening
 
 ---
 
@@ -303,15 +308,21 @@ kubectl get all -n mobilebank
 - ✅ Docker Hub automation
 - ✅ Kubernetes deployment
 
-### Week 2-3: Infrastructure as Code
-- ⏳ Terraform configuration
-- ⏳ Multiple environments (staging/prod)
-- ⏳ Automated provisioning
+### Week 2: Infrastructure as Code ✅
+- ✅ Terraform configuration (modules + multi-environment)
+- ✅ Multiple environments (staging/prod)
+- ✅ Automated provisioning
 
-### Week 4-5: Advanced Kubernetes
-- ⏳ Ingress controller
-- ⏳ Persistent volumes
-- ⏳ ConfigMaps & Secrets
+### Week 3: Advanced Kubernetes ✅
+- ✅ NGINX Ingress controller + Kustomize overlays
+- ✅ ConfigMaps & Secrets (config externalizada + feature flags)
+- ✅ HPA + Metrics Server (autoscaling 2–10 pods)
+- ✅ Persistent Volumes (PVC montado en `/app/data`)
+
+### Week 4-5: Production Hardening
+- ⏳ TLS via cert-manager
+- ⏳ Sealed Secrets / External Secrets Operator
+- ⏳ Network Policies + Pod Security Standards
 
 ### Week 6-8: Production Ready
 - ⏳ Monitoring & logging

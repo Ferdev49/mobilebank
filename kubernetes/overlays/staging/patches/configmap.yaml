@@ -1,0 +1,9 @@
+- op: replace
+  path: /data/ENVIRONMENT
+  value: "staging"
+- op: replace
+  path: /data/LOG_LEVEL
+  value: "DEBUG"
+- op: replace
+  path: /data/MAX_TRANSFER_AMOUNT
+  value: "5000"

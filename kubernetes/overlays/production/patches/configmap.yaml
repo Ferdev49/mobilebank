@@ -1,0 +1,12 @@
+- op: replace
+  path: /data/ENVIRONMENT
+  value: "production"
+- op: replace
+  path: /data/LOG_LEVEL
+  value: "INFO"
+- op: replace
+  path: /data/MAX_TRANSFER_AMOUNT
+  value: "50000"
+- op: replace
+  path: /data/DEBUG
+  value: "False"
