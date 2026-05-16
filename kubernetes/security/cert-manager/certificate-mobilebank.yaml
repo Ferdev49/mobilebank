@@ -1,0 +1,31 @@
+# Certificate para staging
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mobilebank-staging-tls
+  namespace: mobilebank-staging
+spec:
+  secretName: mobilebank-staging-tls
+  duration: 2160h    # 90 dias
+  renewBefore: 360h  # 15 dias
+  dnsNames:
+    - staging.mobilebank.local
+  issuerRef:
+    name: mobilebank-ca-issuer
+    kind: ClusterIssuer
+---
+# Certificate para production
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mobilebank-production-tls
+  namespace: mobilebank-production
+spec:
+  secretName: mobilebank-production-tls
+  duration: 2160h
+  renewBefore: 360h
+  dnsNames:
+    - api.mobilebank.local
+  issuerRef:
+    name: mobilebank-ca-issuer
+    kind: ClusterIssuer

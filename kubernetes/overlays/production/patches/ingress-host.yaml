@@ -2,5 +2,11 @@
   path: /spec/rules/0/host
   value: api.mobilebank.local
 - op: replace
+  path: /spec/tls/0/hosts/0
+  value: api.mobilebank.local
+- op: replace
+  path: /spec/tls/0/secretName
+  value: mobilebank-production-tls
+- op: replace
   path: /metadata/annotations/nginx.ingress.kubernetes.io~1limit-rps
   value: "100"

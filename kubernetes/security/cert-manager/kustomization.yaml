@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - cluster-issuer.yaml
+  - certificate-mobilebank.yaml
+commonLabels:
+  managed-by: devops-lab
+  week: "5"
+  day: "23"

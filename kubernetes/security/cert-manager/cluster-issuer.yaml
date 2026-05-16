@@ -1,0 +1,50 @@
+# Self-signed issuer (lab / dev clusters sin dominio publico)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-issuer
+spec:
+  selfSigned: {}
+---
+# CA root para emitir certs internos del cluster
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mobilebank-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: mobilebank-internal-ca
+  secretName: mobilebank-ca-key-pair
+  privateKey:
+    algorithm: RSA
+    size: 4096
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+# ClusterIssuer que usa esa CA para los certs del lab
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: mobilebank-ca-issuer
+spec:
+  ca:
+    secretName: mobilebank-ca-key-pair
+---
+# Let's Encrypt staging (descomentar y poner email cuando haya dominio publico real)
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-staging
+# spec:
+#   acme:
+#     server: https://acme-staging-v02.api.letsencrypt.org/directory
+#     email: tu-email@dominio.com
+#     privateKeySecretRef:
+#       name: letsencrypt-staging-key
+#     solvers:
+#       - http01:
+#           ingress:
+#             class: nginx

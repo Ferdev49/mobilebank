@@ -228,3 +228,22 @@ variable "ingress_rate_limit_rps" {
   type        = number
   default     = 20
 }
+
+# ---- TLS (Week 5 - Day 23) ----
+variable "enable_tls" {
+  description = "Habilitar TLS en el Ingress via cert-manager"
+  type        = bool
+  default     = true
+}
+
+variable "tls_cluster_issuer" {
+  description = "Nombre del ClusterIssuer de cert-manager"
+  type        = string
+  default     = "mobilebank-ca-issuer"
+}
+
+variable "tls_secret_name" {
+  description = "Nombre del Secret donde cert-manager guarda el cert (vacio = autogenerado)"
+  type        = string
+  default     = ""
+}
