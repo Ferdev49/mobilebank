@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-receiver
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: webhook-receiver }
+  template:
+    metadata:
+      labels: { app: webhook-receiver }
+    spec:
+      containers:
+        - name: webhook-receiver
+          image: jmalloc/echo-server:0.3.6
+          ports:
+            - { containerPort: 8080 }
+          env:
+            - { name: PORT, value: "8080" }
+          resources:
+            requests: { cpu: "20m", memory: "32Mi" }
+            limits:   { cpu: "100m", memory: "64Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-receiver
+  namespace: observability
+spec:
+  type: ClusterIP
+  ports:
+    - { port: 5001, targetPort: 8080 }
+  selector:
+    app: webhook-receiver

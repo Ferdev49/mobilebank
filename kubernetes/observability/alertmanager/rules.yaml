@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+  namespace: observability
+data:
+  mobilebank.rules.yml: |
+    groups:
+      - name: mobilebank-api
+        interval: 30s
+        rules:
+          - alert: MobileBankHighErrorRate
+            expr: |
+              sum(rate(mobilebank_http_requests_total{status=~"5.."}[5m]))
+                /
+              sum(rate(mobilebank_http_requests_total[5m])) > 0.05
+            for: 2m
+            labels:
+              severity: critical
+              service: mobilebank-api
+            annotations:
+              summary: "Error rate 5xx > 5% en MobileBank"
+              description: "{{ $value | humanizePercentage }} de respuestas son 5xx en los ultimos 5min"
+
+          - alert: MobileBankHighLatency
+            expr: |
+              histogram_quantile(0.95,
+                sum(rate(mobilebank_http_request_duration_seconds_bucket[5m])) by (le, endpoint)
+              ) > 1
+            for: 5m
+            labels:
+              severity: warning
+              service: mobilebank-api
+            annotations:
+              summary: "p95 latency > 1s en {{ $labels.endpoint }}"
+
+          - alert: MobileBankPodCrashLooping
+            expr: |
+              rate(kube_pod_container_status_restarts_total{namespace=~"mobilebank-.*"}[15m]) > 0
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Pod {{ $labels.pod }} en CrashLoop"
+
+      - name: cluster
+        rules:
+          - alert: HPAMaxedOut
+            expr: |
+              kube_hpa_status_current_replicas == kube_hpa_spec_max_replicas
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: "HPA {{ $labels.hpa }} llego al max ({{ $labels.namespace }})"
+
+          - alert: NodeHighCPU
+            expr: |
+              100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Nodo {{ $labels.instance }} CPU > 85% por 10min"
+
+          - alert: NodeLowDisk
+            expr: |
+              (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 0.10
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Nodo {{ $labels.instance }} < 10% disco libre"
+
+          - alert: PVCAlmostFull
+            expr: |
+              kubelet_volume_stats_available_bytes / kubelet_volume_stats_capacity_bytes < 0.10
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "PVC {{ $labels.persistentvolumeclaim }} < 10% libre"
