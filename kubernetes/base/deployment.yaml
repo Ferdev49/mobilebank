@@ -20,14 +20,29 @@ spec:
         prometheus.io/path: "/metrics"
         prometheus.io/port: "5000"
     spec:
+      # Pod Security restricted (Week 5 - Day 25)
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: mobilebank-api
           image: ferdev49/mobilebank-api:latest
           imagePullPolicy: IfNotPresent
+          # Container-level securityContext (Week 5 - Day 25)
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop: ["ALL"]
           ports:
             - containerPort: 5000
               name: http
-          # Configuracion no-sensible y secrets (Week 3 - Day 14)
           envFrom:
             - configMapRef:
                 name: mobilebank-config
@@ -40,7 +55,6 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
-          # Probes mejorados con endpoints dedicados (Week 3)
           livenessProbe:
             httpGet:
               path: /health/live
@@ -62,11 +76,15 @@ spec:
             initialDelaySeconds: 0
             periodSeconds: 3
             failureThreshold: 30
-          # Volumen persistente (Week 3 - Day 16)
           volumeMounts:
             - name: data
               mountPath: /app/data
+            # tmp writable (readOnlyRootFilesystem requiere tmpfs montados aparte)
+            - name: tmp
+              mountPath: /tmp
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: mobilebank-data
+        - name: tmp
+          emptyDir: {}

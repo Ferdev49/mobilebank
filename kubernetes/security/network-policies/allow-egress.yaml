@@ -1,0 +1,63 @@
+# Egress: solo DNS (kube-dns), trafico al mismo namespace, y a observability.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-app-egress
+  namespace: mobilebank-staging
+spec:
+  podSelector:
+    matchLabels:
+      app: mobilebank-api
+  policyTypes: [Egress]
+  egress:
+    # DNS al kube-dns
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Mismo namespace (futuro: Postgres lateral, etc.)
+    - to:
+        - podSelector: {}
+    # Observability (push a Loki si en algun momento la app empuja en lugar de tail)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-app-egress
+  namespace: mobilebank-production
+spec:
+  podSelector:
+    matchLabels:
+      app: mobilebank-api
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - podSelector: {}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability

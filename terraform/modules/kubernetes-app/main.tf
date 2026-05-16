@@ -63,10 +63,32 @@ resource "kubernetes_deployment" "app" {
       }
 
       spec {
+        # Pod Security restricted (Week 5 - Day 25)
+        security_context {
+          run_as_non_root = true
+          run_as_user     = 1000
+          run_as_group    = 1000
+          fs_group        = 1000
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+        }
+
         container {
           image             = var.image
           name              = var.app_name
           image_pull_policy = "IfNotPresent"
+
+          # Container-level security context (Week 5 - Day 25)
+          security_context {
+            allow_privilege_escalation = false
+            read_only_root_filesystem  = true
+            run_as_non_root            = true
+            run_as_user                = 1000
+            capabilities {
+              drop = ["ALL"]
+            }
+          }
 
           port {
             container_port = var.port

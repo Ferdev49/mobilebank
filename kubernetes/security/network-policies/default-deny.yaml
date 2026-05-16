@@ -1,0 +1,19 @@
+# Default deny ALL ingress + egress en cada namespace de mobilebank.
+# Despues whitelist explicita en allow-*.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: mobilebank-staging
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: mobilebank-production
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]

@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - default-deny.yaml
+  - allow-ingress.yaml
+  - allow-egress.yaml
+  - observability.yaml
+commonLabels:
+  managed-by: devops-lab
+  week: "5"
+  day: "25"
