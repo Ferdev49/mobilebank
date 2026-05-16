@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-mobilebank
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+data:
+  mobilebank.json: |
+    {
+      "annotations": { "list": [] },
+      "editable": true,
+      "panels": [
+        {
+          "type": "stat",
+          "title": "Pods UP por environment",
+          "datasource": "Prometheus",
+          "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+          "targets": [
+            { "expr": "count(up{job=\"kubernetes-pods\",app=\"mobilebank-api\"} == 1) by (namespace)", "legendFormat": "{{namespace}}" }
+          ]
+        },
+        {
+          "type": "graph",
+          "title": "HTTP request rate (req/s)",
+          "datasource": "Prometheus",
+          "gridPos": { "x": 6, "y": 0, "w": 12, "h": 8 },
+          "targets": [
+            { "expr": "sum(rate(mobilebank_http_requests_total[1m])) by (method, endpoint)", "legendFormat": "{{method}} {{endpoint}}" }
+          ]
+        },
+        {
+          "type": "graph",
+          "title": "Latencia p95 (ms)",
+          "datasource": "Prometheus",
+          "gridPos": { "x": 0, "y": 4, "w": 6, "h": 8 },
+          "targets": [
+            { "expr": "histogram_quantile(0.95, sum(rate(mobilebank_http_request_duration_seconds_bucket[5m])) by (le, endpoint)) * 1000", "legendFormat": "{{endpoint}}" }
+          ]
+        },
+        {
+          "type": "graph",
+          "title": "Transferencias por minuto",
+          "datasource": "Prometheus",
+          "gridPos": { "x": 0, "y": 12, "w": 9, "h": 8 },
+          "targets": [
+            { "expr": "sum(rate(mobilebank_transfers_total[1m])) by (status)", "legendFormat": "{{status}}" }
+          ]
+        },
+        {
+          "type": "graph",
+          "title": "Pod CPU (cores)",
+          "datasource": "Prometheus",
+          "gridPos": { "x": 9, "y": 12, "w": 9, "h": 8 },
+          "targets": [
+            { "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"mobilebank-.*\",pod=~\"mobilebank-api.*\"}[1m])) by (pod)", "legendFormat": "{{pod}}" }
+          ]
+        }
+      ],
+      "refresh": "15s",
+      "schemaVersion": 38,
+      "title": "MobileBank - Overview",
+      "tags": ["mobilebank", "week4"],
+      "time": { "from": "now-30m", "to": "now" },
+      "timepicker": {},
+      "timezone": "",
+      "version": 1
+    }
